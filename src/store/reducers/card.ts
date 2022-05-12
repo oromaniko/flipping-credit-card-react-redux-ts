@@ -1,13 +1,10 @@
 import { Reducer } from 'redux'
-import {
-    ICardState,
-    CardAction, CardActionTypes
-} from '../../types/card'
+import { ICardState, CardAction, CardActionTypes } from '../../types/card'
 
 const initialCardState: ICardState = {
-    number: null,
+    number: '',
     date: '',
-    CVV: null
+    CVV: '',
 }
 
 export const cardReducer: Reducer<ICardState, CardAction> = (

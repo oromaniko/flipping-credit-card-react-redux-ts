@@ -1,7 +1,7 @@
 export interface ICardState {
-    number: number | null
+    number: string
     date: string
-    CVV: number | null
+    CVV: string
 }
 
 export enum CardActionTypes {
@@ -18,6 +18,4 @@ export interface ICardPostAction {
     type: CardActionTypes.POST
 }
 
-export type CardAction =
-    | ICardAddAction
-    | ICardPostAction
+export type CardAction = ICardAddAction | ICardPostAction

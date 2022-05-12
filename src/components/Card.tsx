@@ -1,18 +1,15 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import InputMask from 'react-input-mask'
 import MastercardLogo from '../assets/mastercard_logo.svg'
 import Chip from '../assets/Group.svg'
 import Logo from '../assets/Logo.svg'
+import Input from './Input'
 
 const Card = () => {
     const [number, setNumber] = useState('')
     const [date, setDate] = useState('')
     const [cvv, setCVV] = useState('')
 
-    const handleChange = (setValue) => (e) => {
-        setValue(e.target.value)
-    }
     return (
         <>
             <CardWrapper>
@@ -22,34 +19,8 @@ const Card = () => {
                 </FrontDataWrapper>
                 <Img src={MastercardLogo} />
                 <NumberWrapper>
-                    <InputMask
-                        mask='9999 9999 9999 9999'
-                        value={number}
-                        alwaysShowMask={false}
-                        onChange={handleChange(setNumber)}
-                    >
-                        {(inputProps) => (
-                            <Input
-                                {...inputProps}
-                                width={130}
-                                placeholder='____ ____ ____ ____'
-                            />
-                        )}
-                    </InputMask>
-                    <InputMask
-                        mask='99/99'
-                        value={date}
-                        alwaysShowMask={false}
-                        onChange={handleChange(setDate)}
-                    >
-                        {(inputProps) => (
-                            <Input
-                                {...inputProps}
-                                width={40}
-                                placeholder='__/__'
-                            />
-                        )}
-                    </InputMask>
+                    <Input type='number' value={number} setValue={setNumber} />
+                    <Input type='frontDate' value={date} setValue={setDate} />
                 </NumberWrapper>
             </CardWrapper>
 
@@ -60,37 +31,15 @@ const Card = () => {
                 <BackDataWrapper>
                     <div>
                         <div>Date</div>
-                        <InputMask
-                            mask='99/99'
+                        <Input
+                            type='frontDate'
                             value={date}
-                            alwaysShowMask={false}
-                            onChange={handleChange(setDate)}
-                        >
-                            {(inputProps) => (
-                                <Input
-                                    {...inputProps}
-                                    width={30}
-                                    placeholder='__/__'
-                                />
-                            )}
-                        </InputMask>
+                            setValue={setDate}
+                        />
                     </div>
                     <div>
                         <div>CVV</div>
-                        <InputMask
-                            mask='9999'
-                            value={cvv}
-                            alwaysShowMask={false}
-                            onChange={handleChange(setCVV)}
-                        >
-                            {(inputProps) => (
-                                <Input
-                                    {...inputProps}
-                                    width={30}
-                                    placeholder='____'
-                                />
-                            )}
-                        </InputMask>
+                        <Input type='cvv' value={cvv} setValue={setCVV} />
                     </div>
                 </BackDataWrapper>
                 <div>
@@ -113,14 +62,6 @@ const CardWrapper = styled.div`
     flex-direction: column;
     justify-content: space-between;
     position: relative;
-`
-
-const Input = styled.input`
-    background-color: transparent;
-    padding: 0;
-    border: 0;
-    color: #ffffff;
-    width: ${(props) => `${props.width}px`};
 `
 
 const FrontDataWrapper = styled.div`
