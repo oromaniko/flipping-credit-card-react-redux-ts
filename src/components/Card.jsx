@@ -1,10 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
+import InputMask from 'react-input-mask'
 import MastercardLogo from '../assets/mastercard_logo.svg'
 import Chip from '../assets/Group.svg'
 import Logo from '../assets/Logo.svg'
 
 const Card = () => {
+    const [number, setNumber] = useState('')
+    const [date, setDate] = useState('')
+    const [cvv, setCVV] = useState('')
+
+    const handleChange = (setValue) => (e) => {
+        setValue(e.target.value)
+    }
     return (
         <>
             <CardWrapper>
@@ -14,8 +22,34 @@ const Card = () => {
                 </FrontDataWrapper>
                 <Img src={MastercardLogo} />
                 <NumberWrapper>
-                    <Input width={160} value='5282 5282 5282 5282' />
-                    <Input width={40} value='09/25' />
+                    <InputMask
+                        mask='9999 9999 9999 9999'
+                        value={number}
+                        alwaysShowMask={false}
+                        onChange={handleChange(setNumber)}
+                    >
+                        {(inputProps) => (
+                            <Input
+                                {...inputProps}
+                                width={130}
+                                placeholder='____ ____ ____ ____'
+                            />
+                        )}
+                    </InputMask>
+                    <InputMask
+                        mask='99/99'
+                        value={date}
+                        alwaysShowMask={false}
+                        onChange={handleChange(setDate)}
+                    >
+                        {(inputProps) => (
+                            <Input
+                                {...inputProps}
+                                width={40}
+                                placeholder='__/__'
+                            />
+                        )}
+                    </InputMask>
                 </NumberWrapper>
             </CardWrapper>
 
@@ -26,11 +60,37 @@ const Card = () => {
                 <BackDataWrapper>
                     <div>
                         <div>Date</div>
-                        <Input width={30} value='09/25' />
+                        <InputMask
+                            mask='99/99'
+                            value={date}
+                            alwaysShowMask={false}
+                            onChange={handleChange(setDate)}
+                        >
+                            {(inputProps) => (
+                                <Input
+                                    {...inputProps}
+                                    width={30}
+                                    placeholder='__/__'
+                                />
+                            )}
+                        </InputMask>
                     </div>
                     <div>
                         <div>CVV</div>
-                        <Input width={30} value='2435' />
+                        <InputMask
+                            mask='9999'
+                            value={cvv}
+                            alwaysShowMask={false}
+                            onChange={handleChange(setCVV)}
+                        >
+                            {(inputProps) => (
+                                <Input
+                                    {...inputProps}
+                                    width={30}
+                                    placeholder='____'
+                                />
+                            )}
+                        </InputMask>
                     </div>
                 </BackDataWrapper>
                 <div>
