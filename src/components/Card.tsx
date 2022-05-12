@@ -9,9 +9,15 @@ const Card = () => {
     const [number, setNumber] = useState('')
     const [date, setDate] = useState('')
     const [cvv, setCVV] = useState('')
+    const [flipped, setFlipped] = useState(false)
+
+    const handleClick = (e: React.MouseEvent) => {
+        e.preventDefault()
+        setFlipped(!flipped)
+    }
 
     return (
-        <>
+        <Container onClick={handleClick} flipped={flipped}>
             <CardWrapper>
                 <FrontDataWrapper>
                     <div>Current Balance</div>
@@ -46,22 +52,41 @@ const Card = () => {
                     <img src={Chip} alt='logo' />
                 </div>
             </CardWrapper>
-        </>
+        </Container>
     )
 }
 
 export default Card
 
-const CardWrapper = styled.div`
+const Container = styled.div`
+    transform-style: preserve-3d;
     width: 315px;
     height: 184px;
+    perspective: 1200px;
+    transition: transform 0.8s linear;
+    transform: ${(props) =>
+        props.flipped ? 'rotateY(180deg)' : 'rotateY(0deg)'};
+
+    > div:first-child {
+        transform: rotateY(0deg);
+    }
+
+    > div:last-child {
+        transform: rotateY(180deg);
+    }
+`
+
+const CardWrapper = styled.div`
+    width: 100%;
+    height: 100%;
     background: linear-gradient(177.23deg, #9c2cf3 -13.49%, #3a49f9 109.75%);
     border-radius: 30px;
     display: flex;
     padding: 30px 30px 25px 30px;
     flex-direction: column;
     justify-content: space-between;
-    position: relative;
+    position: absolute;
+    backface-visibility: hidden;
 `
 
 const FrontDataWrapper = styled.div`
