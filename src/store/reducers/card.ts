@@ -4,7 +4,7 @@ import { ICardState, CardAction, CardActionTypes } from '../../types/card'
 const initialCardState: ICardState = {
     number: '',
     date: '',
-    CVV: '',
+    cvv: '',
 }
 
 export const cardReducer: Reducer<ICardState, CardAction> = (

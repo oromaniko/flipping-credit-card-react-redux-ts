@@ -1,16 +1,30 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import MastercardLogo from '../assets/mastercard_logo.svg'
 import Chip from '../assets/Group.svg'
 import Logo from '../assets/Logo.svg'
 import Input from './Input'
 import { InputTypes } from './inputSchema'
+import { useDispatch } from 'react-redux'
+import { addCardData } from '../store/action-creators/card'
 
 const Card = () => {
     const [number, setNumber] = useState('')
     const [date, setDate] = useState('')
     const [cvv, setCVV] = useState('')
     const [flipped, setFlipped] = useState(false)
+    const [isFormValid, setIsFormValid] = useState({
+        number: false,
+        date: false,
+        cvv: false,
+    })
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (Object.values(isFormValid).every((el) => el)) {
+            dispatch(addCardData({ number, date, cvv }))
+        }
+    }, [isFormValid])
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
         e.preventDefault()
@@ -18,54 +32,62 @@ const Card = () => {
     }
 
     return (
-        <Container onClick={handleClick} flipped={flipped}>
-            <CardWrapper>
-                <FrontDataWrapper>
-                    <div>Current Balance</div>
-                    <div>$5,750,20</div>
-                </FrontDataWrapper>
-                <Img src={MastercardLogo} />
-                <NumberWrapper>
-                    <Input
-                        type={InputTypes.number}
-                        value={number}
-                        setValue={setNumber}
-                    />
-                    <Input
-                        type={InputTypes.frontDate}
-                        value={date}
-                        setValue={setDate}
-                    />
-                </NumberWrapper>
-            </CardWrapper>
+        <>
+            <Container onClick={handleClick} flipped={flipped}>
+                <CardWrapper>
+                    <FrontDataWrapper>
+                        <div>Current Balance</div>
+                        <div>$5,750,20</div>
+                    </FrontDataWrapper>
+                    <Img src={MastercardLogo} />
+                    <NumberWrapper>
+                        <Input
+                            type={InputTypes.number}
+                            value={number}
+                            setValue={setNumber}
+                            setValid={setIsFormValid}
+                        />
+                        <div style={{ pointerEvents: 'none' }}>
+                            <Input
+                                type={InputTypes.date}
+                                value={date}
+                                setValue={setDate}
+                                setValid={setIsFormValid}
+                            />
+                        </div>
+                    </NumberWrapper>
+                </CardWrapper>
 
-            <CardWrapper>
-                <BackLogoWrapper>
-                    <img src={Logo} alt='logo' />
-                </BackLogoWrapper>
-                <BackDataWrapper>
+                <CardWrapper>
+                    <BackLogoWrapper>
+                        <img src={Logo} alt='logo' />
+                    </BackLogoWrapper>
+                    <BackDataWrapper>
+                        <div>
+                            <div>Date</div>
+                            <Input
+                                type={InputTypes.date}
+                                value={date}
+                                setValue={setDate}
+                                setValid={setIsFormValid}
+                            />
+                        </div>
+                        <div>
+                            <div>CVV</div>
+                            <Input
+                                type={InputTypes.cvv}
+                                value={cvv}
+                                setValue={setCVV}
+                                setValid={setIsFormValid}
+                            />
+                        </div>
+                    </BackDataWrapper>
                     <div>
-                        <div>Date</div>
-                        <Input
-                            type={InputTypes.backDate}
-                            value={date}
-                            setValue={setDate}
-                        />
+                        <img src={Chip} alt='logo' />
                     </div>
-                    <div>
-                        <div>CVV</div>
-                        <Input
-                            type={InputTypes.cvv}
-                            value={cvv}
-                            setValue={setCVV}
-                        />
-                    </div>
-                </BackDataWrapper>
-                <div>
-                    <img src={Chip} alt='logo' />
-                </div>
-            </CardWrapper>
-        </Container>
+                </CardWrapper>
+            </Container>
+        </>
     )
 }
 
@@ -80,11 +102,15 @@ const Container = styled.div<{ flipped: boolean }>`
     transform: ${({ flipped }) =>
         flipped ? 'rotateY(180deg)' : 'rotateY(0deg)'};
 
+    :hover {
+        cursor: pointer;
+    }
+
     > div:first-child {
         transform: rotateY(0deg);
     }
 
-    > div:last-child {
+    > div:nth-child(2) {
         transform: rotateY(180deg);
     }
 `
@@ -145,20 +171,20 @@ const BackLogoWrapper = styled.div`
 
 const BackDataWrapper = styled.div`
     display: flex;
-    gap: 25px;
+    gap: 20px;
 
-    div {
+    > div {
         display: flex;
         flex-direction: column;
         gap: 12px;
 
-        div {
+        > div:first-child {
             font-size: 12px;
             line-height: 14px;
             opacity: 0.5;
         }
 
-        input {
+        > input {
             font-size: 11px;
             line-height: 162.7%;
         }

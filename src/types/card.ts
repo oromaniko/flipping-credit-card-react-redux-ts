@@ -1,7 +1,7 @@
 export interface ICardState {
     number: string
     date: string
-    CVV: string
+    cvv: string
 }
 
 export enum CardActionTypes {
