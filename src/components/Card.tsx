@@ -113,6 +113,11 @@ const Container = styled.div<{ flipped: boolean }>`
     > div:nth-child(2) {
         transform: rotateY(180deg);
     }
+
+    @media (max-width: 320px) {
+        width: 250px;
+        height: 160px;
+    }
 `
 
 const CardWrapper = styled.div`
