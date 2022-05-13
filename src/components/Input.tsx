@@ -15,27 +15,40 @@ interface InputProps {
 const Input = ({ type, value, setValue, setValid }: InputProps) => {
     const [validationError, setValidationError] = useState('')
 
-    const handleChange =
-        (setValue: React.Dispatch<React.SetStateAction<string>>) =>
-        (e: React.ChangeEvent<HTMLInputElement>) => {
-            setValue(e.target.value)
-        }
+    const validate = useCallback(
+        async (currentValue: string) => {
+            const isValid = await inputSchema[type].yupSchema.isValid(
+                currentValue
+            )
+            if (isValid) {
+                setValidationError('')
+            } else {
+                inputSchema[type].yupSchema
+                    .validate(currentValue, {
+                        abortEarly: false,
+                    })
+                    .catch((err: any) => {
+                        setValidationError(String(err.message))
+                    })
+            }
+        },
+        [type]
+    )
 
-    const handleBlur = useCallback(async () => {
-        const isValid = await inputSchema[type].yupSchema.isValid(value)
-        if (isValid) {
-            setValidationError('')
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const currentValue = e.target.value
+        setValue(currentValue)
+        validate(currentValue)
+    }
+
+    const handleBlur = (e: React.FocusEvent) => {
+        e.stopPropagation()
+        if (!validationError) {
             setValid((prev) => ({ ...prev, [type]: true }))
         } else {
-            inputSchema[type].yupSchema
-                .validate(value, {
-                    abortEarly: false,
-                })
-                .catch((err: any) => {
-                    setValidationError(String(err.message))
-                })
+            setValid((prev) => ({ ...prev, [type]: false }))
         }
-    }, [value, setValid, type])
+    }
 
     return (
         <InputContainer>
@@ -44,7 +57,7 @@ const Input = ({ type, value, setValue, setValid }: InputProps) => {
                 mask={inputSchema[type].mask}
                 alwaysShowMask={false}
                 value={value}
-                onChange={handleChange(setValue)}
+                onChange={handleChange}
                 onClick={(e: React.MouseEvent<HTMLInputElement>) =>
                     e.stopPropagation()
                 }
