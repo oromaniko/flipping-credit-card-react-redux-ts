@@ -4,6 +4,7 @@ import MastercardLogo from '../assets/mastercard_logo.svg'
 import Chip from '../assets/Group.svg'
 import Logo from '../assets/Logo.svg'
 import Input from './Input'
+import { InputTypes } from './inputSchema'
 
 const Card = () => {
     const [number, setNumber] = useState('')
@@ -11,7 +12,7 @@ const Card = () => {
     const [cvv, setCVV] = useState('')
     const [flipped, setFlipped] = useState(false)
 
-    const handleClick = (e: React.MouseEvent) => {
+    const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
         e.preventDefault()
         setFlipped(!flipped)
     }
@@ -25,8 +26,16 @@ const Card = () => {
                 </FrontDataWrapper>
                 <Img src={MastercardLogo} />
                 <NumberWrapper>
-                    <Input type='number' value={number} setValue={setNumber} />
-                    <Input type='frontDate' value={date} setValue={setDate} />
+                    <Input
+                        type={InputTypes.number}
+                        value={number}
+                        setValue={setNumber}
+                    />
+                    <Input
+                        type={InputTypes.frontDate}
+                        value={date}
+                        setValue={setDate}
+                    />
                 </NumberWrapper>
             </CardWrapper>
 
@@ -38,14 +47,18 @@ const Card = () => {
                     <div>
                         <div>Date</div>
                         <Input
-                            type='frontDate'
+                            type={InputTypes.backDate}
                             value={date}
                             setValue={setDate}
                         />
                     </div>
                     <div>
                         <div>CVV</div>
-                        <Input type='cvv' value={cvv} setValue={setCVV} />
+                        <Input
+                            type={InputTypes.cvv}
+                            value={cvv}
+                            setValue={setCVV}
+                        />
                     </div>
                 </BackDataWrapper>
                 <div>
@@ -58,14 +71,14 @@ const Card = () => {
 
 export default Card
 
-const Container = styled.div`
+const Container = styled.div<{ flipped: boolean }>`
     transform-style: preserve-3d;
     width: 315px;
     height: 184px;
     perspective: 1200px;
     transition: transform 0.8s linear;
-    transform: ${(props) =>
-        props.flipped ? 'rotateY(180deg)' : 'rotateY(0deg)'};
+    transform: ${({ flipped }) =>
+        flipped ? 'rotateY(180deg)' : 'rotateY(0deg)'};
 
     > div:first-child {
         transform: rotateY(0deg);

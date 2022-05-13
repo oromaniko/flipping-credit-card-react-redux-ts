@@ -6,23 +6,30 @@ export interface IInputSchema {
     }
 }
 
+export enum InputTypes {
+    number = 'number',
+    frontDate = 'frontDate',
+    backDate = 'backDate',
+    cvv = 'cvv',
+}
+
 const inputSchema: IInputSchema = {
-    number: {
+    [InputTypes.number]: {
         mask: '9999 9999 9999 9999',
         width: '130px',
         placeholder: '____ ____ ____ ____',
     },
-    frontDate: {
+    [InputTypes.frontDate]: {
         mask: '99/99',
         width: '40px',
         placeholder: '__/__',
     },
-    backDate: {
+    [InputTypes.backDate]: {
         mask: '99/99',
         width: '27px',
         placeholder: '__/__',
     },
-    cvv: {
+    [InputTypes.cvv]: {
         mask: '9999',
         width: '30px',
         placeholder: '____',

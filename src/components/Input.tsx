@@ -1,10 +1,10 @@
 import React from 'react'
 import InputMask from 'react-input-mask'
-import inputSchema from './inputSchema'
+import inputSchema, { InputTypes } from './inputSchema'
 import styled from 'styled-components'
 
 interface InputProps {
-    type: string
+    type: InputTypes
     value: string
     setValue: React.Dispatch<React.SetStateAction<string>>
 }
@@ -23,6 +23,9 @@ const Input = ({ type, value, setValue }: InputProps) => {
             alwaysShowMask={false}
             value={value}
             onChange={handleChange(setValue)}
+            onClick={(e: React.MouseEvent<HTMLInputElement>) =>
+                e.stopPropagation()
+            }
             placeholder={inputSchema[type].placeholder}
             width={inputSchema[type].width}
         />
@@ -36,5 +39,5 @@ const InputWrapper = styled.input`
     padding: 0;
     border: 0;
     color: #ffffff;
-    width: ${(props) => `${props.width}px`};
+    width: ${(props) => props.width};
 `
